@@ -17,19 +17,19 @@
             try {
                 const response = await fetch("/api/user/profileDetails", {
                     method: "GET",
-                    credentials: "include" // Include cookies for session authentication
+                    credentials: "include" 
                 });
 
                 if (response.ok) {
                     const data = await response.json();
 
-                    // Autofill fields with user data
+                    
                     document.getElementById("username").value = data.username || ""; // Username
                     document.getElementById("firstName").value = data.firstName || ""; // First Name
                     document.getElementById("lastName").value = data.lastName || ""; // Last Name
                     document.getElementById("email").value = data.email || ""; // Email
 
-                    // Handle song styles
+                    
                     if (data.songStyles) {
                         const styles = data.songStyles.split(","); // Assuming it's a comma-separated string
                         const songStyleSelect = document.getElementById("songStyle");
@@ -40,7 +40,7 @@
                         }
                     }
 
-                    // Handle music preferences
+                    
                     if (data.musicPreferences) {
                         const preferences = data.musicPreferences.split(","); // Assuming it's a comma-separated string
                         const checkboxes = document.querySelectorAll("input[name='musicPreferences']");
@@ -49,13 +49,13 @@
                         });
                     }
 
-                    // Handle role selection
+                   
                     if (data.role) {
                         document.querySelector(`input[name="role"][value="${data.role}"]`).checked = true;
-                        toggleSingerOptions(); // Call to toggle singer options based on role
+                        toggleSingerOptions(); 
                     }
 
-                    // Handle songs
+                    
                     document.getElementById("songs").value = data.songs || ""; // Songs field
                 } else {
                     console.error("Failed to fetch user profile:", response.statusText);
