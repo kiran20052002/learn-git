@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+    <link rel="stylesheet" href="usercreation.css" />
+    <script>
+        function toggleSingerOptions() {
+            var role = document.querySelector('input[name="role"]:checked').value;
+            var singerField = document.getElementById("singer-options");
+            singerField.style.display = role === "Singer" ? "block" : "none";
+        }
+
+        // Autofill function
+        async function autofillUserData() {
+            try {
+                const response = await fetch("/api/user/profileDetails", {
+                    method: "GET",
+                    credentials: "include" // Include cookies for session authentication
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Autofill fields with user data
+                    document.getElementById("username").value = data.username || ""; // Username
+                    document.getElementById("firstName").value = data.firstName || ""; // First Name
+                    document.getElementById("lastName").value = data.lastName || ""; // Last Name
+                    document.getElementById("email").value = data.email || ""; // Email
+
+                    // Handle song styles
+                    if (data.songStyles) {
+                        const styles = data.songStyles ? data.songStyles.split(',') : [];
+                        const songStyleSelect = document.querySelectorAll("input[name='songStyles']");
+                        songStyleSelect.forEach(option => {
+                            option.checked = styles.includes(option.value);
+                        });
+                    }
+
+                    // Handle music preferences
+                    if (data.musicPreferences) {
+                        const preferences = data.musicPreferences ? data.musicPreferences.split(',') : [];
+                        const checkboxes = document.querySelectorAll("input[name='musicPreferences']");
+                        checkboxes.forEach(checkbox => {
+                            checkbox.checked = preferences.includes(checkbox.value);
+                        });
+                    }
+
+                    // Handle role selection
+                    if (data.role) {
+                        document.querySelector(`input[name="role"][value="${data.role}"]`).checked = true;
+                        toggleSingerOptions(); // Call to toggle singer options based on role
+                    }
+
+                    // Handle songs
+                    document.getElementById("songs").value = data.songs || ""; // Songs field
+                } else {
+                    console.error("Failed to fetch user profile:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+            }
+        }
+
+        // Handle form submission
+        async function handleFormSubmission(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(event.target);
+            const data = {};
+
+            // Convert FormData to JSON
+            formData.forEach((value, key) => {
+                if (Array.isArray(data[key])) {
+                    data[key].push(value); // Handle multiple values
+                } else if (data[key]) {
+                    data[key] = [data[key], value]; // Convert to array if it already exists
+                } else {
+                    data[key] = value; // Set the value
+                }
+            });
+
+            // Ensure songStyles and musicPreferences are arrays
+            data.songStyles = Array.isArray(data.songStyles) ? data.songStyles : [data.songStyles];
+            data.musicPreferences = Array.isArray(data.musicPreferences) ? data.musicPreferences : [data.musicPreferences];
+
+            try {
+                const response = await fetch("/api/user/profile", {
+                    method: "PUT", // Use PUT for updating data
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                    credentials: "include" // Include cookies for session authentication
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert("Profile updated successfully!");
+                    window.location.href = "mainPage.html"; // Redirect to main page
+                } else {
+                    console.error("Failed to update profile:", response.statusText);
+                    alert("Failed to update profile.");
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                alert("An error occurred while updating your profile.");
+            }
+        }
+
+        // Call autofillUserData on page load
+        document.addEventListener("DOMContentLoaded", autofillUserData);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Complete Your Profile</h2>
+        <form method="post" onsubmit="handleFormSubmission(event)">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required />
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required />
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+
+            <label>Preferred Song Styles:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="songStyles" value="Hip-Hop" /> Hip-Hop</label>
+                <label><input type="checkbox" name="songStyles" value="Rap" /> Rap</label>
+                <label><input type="checkbox" name="songStyles" value="RnB" /> R&B</label>
+                <label><input type="checkbox" name="songStyles" value="Pop" /> Pop</label>
+                <label><input type="checkbox" name="songStyles" value="Trap" /> Trap</label>
+                
+            </div>
+
+            <label>Music Preferences:</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="musicPreferences" value="Freestyle" /> Freestyle</label>
+                <label><input type="checkbox" name="musicPreferences" value="Lyrical" /> Lyrical</label>
+                <label><input type="checkbox" name="musicPreferences" value="Battle" /> Battle</label>
+                <label><input type="checkbox" name="musicPreferences" value="Collaborative" /> Collaborative</label>
+            </div>
+
+            <label>Are you a:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="role" value="Fan" onclick="toggleSingerOptions()" required /> Fan</label>
+                <label><input type="radio" name="role" value="Singer" onclick="toggleSingerOptions()" /> Singer</label>
+            </div>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

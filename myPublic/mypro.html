@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="mypro.css" />
+    
+  </head>
+  <body>
+    <div class="container">
+      <h1>My Profile</h1>
+      <form id="profileForm">
+        <label for="username">Username:</label>
+        <div class="profile-detail" id="username"></div>
+
+        <label for="firstName">First Name:</label>
+        <div class="profile-detail" id="firstName"></div>
+
+        <label for="lastName">Last Name:</label>
+        <div class="profile-detail" id="lastName"></div>
+
+        <label for="email">Email:</label>
+        <div class="profile-detail" id="email"></div>
+
+        <label for="songStyle">Preferred Song Styles:</label>
+        <div class="profile-detail" id="songStyle"></div>
+
+        <label for="musicPreferences">Music Preferences:</label>
+        <div class="profile-detail" id="musicPreferences"></div>
+
+        <label>Are you a:</label>
+        <div class="profile-detail" id="role"></div>
+      </form>
+
+      <div class="action-buttons">
+        <a href="userCreation.html" class="action-button edit-button">
+          <i class="fas fa-edit"></i> Edit Profile
+        </a>
+      </div>
+    </div>
+
+    <script>
+      async function populateProfile() {
+        try {
+          const response = await fetch("/api/user/profileDetails");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const userProfile = await response.json();
+
+          // Set profile details
+          document.getElementById("username").innerText =
+            userProfile.username || "N/A";
+          document.getElementById("firstName").innerText =
+            userProfile.firstName || "N/A";
+          document.getElementById("lastName").innerText =
+            userProfile.lastName || "N/A";
+          document.getElementById("email").innerText =
+            userProfile.email || "N/A";
+
+          // Set song styles
+          document.getElementById("songStyle").innerText =
+            userProfile.songStyles.join(", ") || "N/A";
+
+          // Set music preferences
+          const musicPreferences = userProfile.musicPreferences || [];
+          document.getElementById("musicPreferences").innerText =
+            musicPreferences.join(", ") || "N/A";
+
+          // Set role
+          document.getElementById("role").innerText = userProfile.role || "N/A";
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", populateProfile);
+    </script>
+  </body>
+</html>

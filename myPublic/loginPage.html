@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <link rel="stylesheet" href="loginpagestyle.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Login</h2>
+      <form id="login-form" action="/login" method="POST">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+        />
+
+        <button type="submit" class="login-button">Login</button>
+      </form>
+      <p onclick="window.location.href='/forgot-password.html'" class="forgot">
+        Forgotten Password?
+      </p>
+      <p >Don’t have an account? <a href="userCreation.html" class="new">Create new</a></p>
+
+      <div class="separator">
+        <span>Or Login with</span>
+      </div>
+
+      <div class="social-login-buttons">
+        <button
+          class="social-login google-login"
+          onclick="window.location.href='/auth/google'"
+        >
+          <img src="https://www.google.com/favicon.ico" alt="Google icon" />
+          Sign in with Google
+        </button>
+        <button
+          class="social-login facebook-login"
+          onclick="window.location.href='/auth/facebook'"
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+            alt="Facebook icon"
+          />
+          Sign in with Facebook
+        </button>
+        <button
+          class="social-login github-login"
+          onclick="window.location.href='/auth/github'"
+        >
+          <img
+            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+            alt="GitHub icon"
+          />
+          Sign in with GitHub
+        </button>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            const response = await fetch("/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Successful login
+              window.location.href = "mainPage.html"; // Redirect to main.html
+            } else {
+              // Show alert for invalid login
+              alert(
+                data.message || "Login failed. Please check your credentials."
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+          }
+        });
+    </script>
+  </body>
+</html>

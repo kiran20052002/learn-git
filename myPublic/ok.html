@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Dre's Studio - Artist Battle</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gradient-to-r from-blue-900 via-red-700 to-yellow-400 text-white font-sans flex flex-col items-center min-h-screen">
+
+    <!-- Header Section -->
+    <header class="flex items-center mt-6 space-x-4">
+        <img src="music.png" alt="Logo" class="w-12 h-12 rounded-full">
+        <h1 class="text-2xl font-bold text-yellow-300">Dr. Dre's Studio</h1>
+    </header>
+
+    <!-- Search Section -->
+    <section class="text-center mt-10 w-full max-w-md">
+        <h2 class="text-3xl font-semibold">Find Artists to Battle</h2>
+        <div class="mt-6 flex items-center justify-center space-x-2">
+            <input type="text" placeholder="Enter artist name..." id="artist-search"
+                class="w-64 p-2 text-black rounded-lg focus:ring-2 focus:ring-yellow-400 outline-none">
+            <button
+                class="px-4 py-2 bg-yellow-500 text-blue-900 font-medium rounded-lg hover:bg-yellow-600 transition-transform transform hover:scale-105">
+                Search for Artists to Battle
+            </button>
+        </div>
+    </section>
+
+    <!-- Scrolling Artists Section -->
+    <section class="w-full mt-10 overflow-hidden bg-white text-black shadow-lg">
+        <div class="flex space-x-6 py-4 animate-scroll">
+            <!-- Artist 1 -->
+            <div class="flex flex-col items-center">
+                <img src="artist1.jpg" alt="Artist 1" class="w-20 h-20 rounded-full mb-2">
+                <span class="font-semibold text-center">Artist 1</span>
+            </div>
+            <!-- Artist 2 -->
+            <div class="flex flex-col items-center">
+                <img src="artist2.jpg" alt="Artist 2" class="w-20 h-20 rounded-full mb-2">
+                <span class="font-semibold text-center">Artist 2</span>
+            </div>
+            <!-- Artist 3 -->
+            <div class="flex flex-col items-center">
+                <img src="artist3.jpg" alt="Artist 3" class="w-20 h-20 rounded-full mb-2">
+                <span class="font-semibold text-center">Artist 3</span>
+            </div>
+            <!-- Artist 4 -->
+            <div class="flex flex-col items-center">
+                <img src="artist4.jpg" alt="Artist 4" class="w-20 h-20 rounded-full mb-2">
+                <span class="font-semibold text-center">Artist 4</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Buttons Section -->
+    <section class="flex space-x-4 mt-10">
+        <a href="ind1.html"
+            class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 transition-transform transform hover:scale-105">
+            View Rankings
+        </a>
+        <a href="ind2.html"
+            class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 transition-transform transform hover:scale-105">
+            Upload Your Lyrics
+        </a>
+        <a href="vp.html"
+            class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 transition-transform transform hover:scale-105">
+            Battle Grounds
+        </a>
+    </section>
+
+    <!-- Profile Icon -->
+    <a href="prof.html" class="absolute top-6 right-6">
+        <img src="prof.png" alt="Profile" class="w-10 h-10 transition-transform transform hover:scale-110">
+    </a>
+
+    <!-- Custom Tailwind Animation -->
+    <style>
+        @keyframes scroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-scroll {
+            animation: scroll 20s linear infinite;
+        }
+    </style>
+
+</body>
+
+</html>
